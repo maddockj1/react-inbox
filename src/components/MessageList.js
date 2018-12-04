@@ -1,12 +1,7 @@
 import React, { Component } from 'react'
 import Message from './Message'
 
-class MessageList extends Component {
+const MessageList = ({ messages, toggleSelect, toggleStar }) => {
 
-  render() {
-    return (
-      <Message messages={this.props.messages} />
-    )
-  }
 }
 export default MessageList
