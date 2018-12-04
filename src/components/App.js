@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Toolbar from './Toolbar'
 import MessageList from './MessageList'
+import Compose from './Compose'
 
 class App extends Component {
 
@@ -85,6 +86,25 @@ class App extends Component {
     })
     this.setState({ messages })
   }
+  //Composeing new messages etc etc
+  openComposeCallback = () => this.setState({ compose: !this.state.compopse })
+
+  composeMessageCallback = async (post) => {
+    let body = {
+      subject: post.subject,
+      body: post.body
+    }
+    await fetch('http://localhost:8082/api/messages', {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      },
+    })
+    this.openComposeCallback()
+    this.getMessageState()
+  }
   //set the messages state 
   getMessageState = async () => {
     const response = await fetch('http://localhost:8082/api/messages')
@@ -109,6 +129,7 @@ class App extends Component {
       <div className="App">
         <div className="container">
           <Toolbar messages={this.state.messages}
+            openComposeCallback={this.openComposeCallback.bind(this)}
             markAsRead={this.markAsRead.bind(this)}
             markAsUnread={this.markAsUnread.bind(this)}
             toggleSelectAll={this.toggleSelectAll.bind(this)}
@@ -116,6 +137,7 @@ class App extends Component {
             applyLabel={this.applyLabel.bind(this)}
             removeLabel={this.removeLabel.bind(this)}
           />
+          {this.state.compose ? <Compose composeMessageCallback={this.composeMessageCallback} /> : false}
           <MessageList messages={this.state.messages}
             toggleSelect={this.toggleSelect.bind(this)}
             toggleStar={this.toggleStar.bind(this)}
