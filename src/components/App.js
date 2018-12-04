@@ -59,7 +59,7 @@ class App extends Component {
         message.selected !== selected ? { ...message, selected } : message
       ))
     })
-  })
+  }
 
   applyLabel(label) {
     const messages = this.state.messages.map(message => (
@@ -72,7 +72,7 @@ class App extends Component {
   removeLabel(label) {
     const messages = this.state.messages.map(message => {
       const idx = message.labels.indexOf(label)
-      if (message.selected && index > -1) {
+      if (message.selected && idx > -1) {
         return {
           ...message,
           labels: [
